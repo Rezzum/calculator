@@ -4,22 +4,22 @@ let secondNumber;
 let result;
 
 function add(a, b) {
-    return result = parseInt(a) + parseInt(b);
+    return result = parseFloat(a) + parseFloat(b);
 }
 
 function subtract(a, b) {
-    return result = parseInt(a) - parseInt(b);
+    return result = parseFloat(a) - parseFloat(b);
 }
 
 function multiply(a, b) {
-    return result = parseInt(a) * parseInt(b);
+    return result = parseFloat(a) * parseFloat(b);
 }
 
 function divide(a, b) {
-    if (parseInt(b) === 0) {
+    if (parseFloat(b) === 0) {
         throw new Error("Can't divide by 0");
     }
-    return result = parseInt(a) / parseInt(b);
+    return result = parseFloat(a) / parseFloat(b);
 }
 
 function operate(firstNum, secondNum, localOperator) {
@@ -52,7 +52,7 @@ let output = document.querySelector(".output");
 
 inputContainer.addEventListener("click", (event) => {
     if (event.target.classList.contains("numbers") && operator === "" && event.target.textContent !== "R") {
-        if (firstNumber === undefined) {
+        if (firstNumber === undefined || firstNumber === result) {
             firstNumber = event.target.textContent;
         } else {
             firstNumber += event.target.textContent;
@@ -67,7 +67,7 @@ inputContainer.addEventListener("click", (event) => {
         output.textContent = firstNumber + operator + secondNumber;
     }
 
-    if(event.target.classList.contains("operators") && event.target.textContent !== "=" && operator === "") {
+    if(event.target.classList.contains("operators") && event.target.textContent !== "=") {
         if (firstNumber === undefined) {
             firstNumber = 0;
         }
@@ -94,7 +94,24 @@ inputContainer.addEventListener("click", (event) => {
         operator = "";
     }
 
-    // if (event.target.textContent === "&larr") {
-        
-    // }
+    if (event.target.id === "Delete") {
+        if (firstNumber !== undefined && operator === "" && secondNumber === undefined) {
+            firstNumber = firstNumber.slice(0, firstNumber.length-1);
+            output.textContent = firstNumber;
+        } else if (firstNumber === "") {
+            firstNumber === undefined;
+        }
+
+        if (secondNumber !== undefined) {
+            secondNumber = secondNumber.slice(0, secondNumber.length-1);
+            output.textContent = firstNumber + operator + secondNumber;
+        } else if (secondNumber === "") {
+            secondNumber === undefined;
+        }
+
+        if(operator !== "" && secondNumber === undefined) {
+            operator = "";
+            output.textContent = firstNumber;
+        }
+    }
 })
