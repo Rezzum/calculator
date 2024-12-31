@@ -3,6 +3,7 @@ let firstNumber;
 let secondNumber;
 let result;
 let isError = false;
+let isEqualPressed = false;
 const inputContainer = document.querySelector(".input-container");
 let output = document.querySelector(".output");
 
@@ -58,28 +59,34 @@ inputContainer.addEventListener("click", (event) => {
     } else {
         // TODO: prevent multiple dots
         if (event.target.classList.contains("numbers") && operator === "" && event.target.textContent !== "R") {
+            if (event.target.id === "." && (firstNumber === undefined || isEqualPressed)) {
+                firstNumber = 0 + event.target.textContent;
+                output.textContent = firstNumber;
+            } 
             
-            // completely broken, fix some other time
-            // if (firstNumber === undefined || firstNumber === result) {
-            //     if (event.target.id = "." && firstNumber === undefined) {
-            //         firstNumber = `0${event.target.textContent}`;
-            // } else {
-            //     firstNumber = event.target.textContent;
-            // } else {
-            //     firstNumber += event.target.textContent;
-            // }
-
-            // if (event.target.id === "." && firstNumber.includes(".")) {
-            //     return;
-            // }
-            
-            output.textContent = firstNumber;
-            scrollToEnd();
-        } else if (event.target.classList.contains("numbers") && operator !== "" && event.target.textContent !== "R") {
-            if (event.target.id === "." && secondNumber.includes(".")) {
+            if (event.target.id === "." && firstNumber.includes(".")) {
                 return;
             }
             
+            if (firstNumber === undefined || isEqualPressed) {
+                firstNumber = event.target.textContent;
+            } else {
+                firstNumber += event.target.textContent;
+            }
+
+            isEqualPressed = false;
+            output.textContent = firstNumber;
+            scrollToEnd();
+        } else if (event.target.classList.contains("numbers") && operator !== "" && event.target.textContent !== "R") {        
+            if (event.target.id === "." && secondNumber === undefined) {
+                secondNumber = `0${event.target.textContent}`;
+                output.textContent = firstNumber + operator + secondNumber;
+            }
+
+            if (event.target.id === "." && secondNumber.includes(".")) {
+                return;
+            }
+
             if (secondNumber === undefined) {
                 secondNumber = event.target.textContent;
             } else {
@@ -107,6 +114,7 @@ inputContainer.addEventListener("click", (event) => {
                 if (typeof result === "number" && !isNaN(result)) {
                     output.textContent = result.toFixed(6).replace(/\.?0+$/, '');
                     firstNumber = result.toFixed(6).replace(/\.?0+$/, '');
+                    console.log(` ${firstNumber} of type ${typeof firstNumber}`);
                 } else {
                     output.textContent = result;
                 }
@@ -114,6 +122,7 @@ inputContainer.addEventListener("click", (event) => {
                 scrollToEnd();
                 operator = "";
                 secondNumber = undefined;
+                isEqualPressed = true;
             } catch (error) {
                 output.textContent = error.message;
             }
