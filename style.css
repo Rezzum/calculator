@@ -26,6 +26,7 @@ body {
     flex: 1 1 0;
     border-radius: 2px;
     height: 100px;
+    width: 190px;
     display: flex;
     align-items: end;
     text-align: end;
@@ -35,6 +36,9 @@ body {
 .output {
     flex: 1;
     font-size: 20px;
+    width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .input-container {
